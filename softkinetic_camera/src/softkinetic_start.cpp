@@ -200,7 +200,7 @@ void onNewColorSample(ColorNode node, ColorNode::NewSampleReceivedData data)
   }
   else
   {
-    // Nothing special to do for MJPEG stream; just cast and reuse the camera data    
+    // Nothing special to do for MJPEG stream; just cast and reuse the camera data
     cv_img_rgb.data = reinterpret_cast<uchar *>(
           const_cast<uint8_t *>(static_cast<const uint8_t *>(data.colorMap)));
   }
@@ -302,6 +302,7 @@ void setupCameraInfo(const DepthSense::IntrinsicParameters& params, sensor_msgs:
 // New depth sample event varsace tieshandler
 void onNewDepthSample(DepthNode node, DepthNode::NewSampleReceivedData data)
 {
+  //ROS_INFO_THROTTLE(10.0, "onNewDepthSample");
   if (img_depth.data.size() == 0)
   {
     // Project some 3D points in the Color Frame
@@ -487,31 +488,31 @@ void configureDepthNode()
   }
   catch (ArgumentException& e)
   {
-    printf("Argument Exception: %s\n", e.what());
+    printf("configureDepthNode - Argument Exception: %s\n", e.what());
   }
   catch (UnauthorizedAccessException& e)
   {
-    printf("Unauthorized Access Exception: %s\n", e.what());
+    printf("configureDepthNode - Unauthorized Access Exception: %s\n", e.what());
   }
   catch (IOException& e)
   {
-    printf("IO Exception: %s\n", e.what());
+    printf("configureDepthNode - IO Exception: %s\n", e.what());
   }
   catch (InvalidOperationException& e)
   {
-    printf("Invalid Operation Exception: %s\n", e.what());
+    printf("configureDepthNode - Invalid Operation Exception: %s\n", e.what());
   }
   catch (ConfigurationException& e)
   {
-    printf("Configuration Exception: %s\n", e.what());
+    printf("configureDepthNode - Configuration Exception: %s\n", e.what());
   }
   catch (StreamingException& e)
   {
-    printf("Streaming Exception: %s\n", e.what());
+    printf("configureDepthNode - Streaming Exception: %s\n", e.what());
   }
   catch (TimeoutException&)
   {
-    printf("TimeoutException\n");
+    printf("configureDepthNode - TimeoutException\n");
   }
 }
 
@@ -538,31 +539,31 @@ void configureColorNode()
   }
   catch (ArgumentException& e)
   {
-    printf("Argument Exception: %s\n", e.what());
+    printf("configureColorNode - Argument Exception: %s\n", e.what());
   }
   catch (UnauthorizedAccessException& e)
   {
-    printf("Unauthorized Access Exception: %s\n", e.what());
+    printf("configureColorNode - Unauthorized Access Exception: %s\n", e.what());
   }
   catch (IOException& e)
   {
-    printf("IO Exception: %s\n", e.what());
+    printf("configureColorNode - IO Exception: %s\n", e.what());
   }
   catch (InvalidOperationException& e)
   {
-    printf("Invalid Operation Exception: %s\n", e.what());
+    printf("configureColorNode - Invalid Operation Exception: %s\n", e.what());
   }
   catch (ConfigurationException& e)
   {
-    printf("Configuration Exception: %s\n", e.what());
+    printf("configureColorNode - Configuration Exception: %s\n", e.what());
   }
   catch (StreamingException& e)
   {
-    printf("Streaming Exception: %s\n", e.what());
+    printf("configureColorNode - Streaming Exception: %s\n", e.what());
   }
   catch (TimeoutException&)
   {
-    printf("TimeoutException\n");
+    printf("configureColorNode - TimeoutException\n");
   }
 }
 
@@ -583,12 +584,12 @@ void configureNode(Node node)
     g_context.registerNode(node);
   }
 
-  if ((node.is<AudioNode>()) && (!g_anode.isSet()))
-  {
-    g_anode = node.as<AudioNode>();
-    configureAudioNode();
-    g_context.registerNode(node);
-  }
+//  if ((node.is<AudioNode>()) && (!g_anode.isSet()))
+//  {
+//    g_anode = node.as<AudioNode>();
+//    configureAudioNode();
+//    g_context.registerNode(node);
+//  }
 }
 
 /*----------------------------------------------------------------------------*/
@@ -729,7 +730,7 @@ int main(int argc, char* argv[])
     depth_frame_format = FRAME_FORMAT_VGA;
 
   nh.param<bool>("enable_depth", depth_enabled, true);
-  nh.param<int>("depth_frame_rate", depth_frame_rate, 25);
+  nh.param<int>("depth_frame_rate", depth_frame_rate, 30);
 
   std::string color_compression_str;
   nh.param<std::string>("color_compression", color_compression_str, "MJPEG");
@@ -739,7 +740,7 @@ int main(int argc, char* argv[])
     color_compression = COMPRESSION_TYPE_MJPEG;
 
   std::string color_frame_format_str;
-  nh.param<std::string>("color_frame_format", color_frame_format_str, "WXGA");
+  nh.param<std::string>("color_frame_format", color_frame_format_str, "VGA");
   if (color_frame_format_str == "QQVGA")
     color_frame_format = FRAME_FORMAT_QQVGA;
   else if (color_frame_format_str == "QVGA")
@@ -752,7 +753,7 @@ int main(int argc, char* argv[])
     color_frame_format = FRAME_FORMAT_WXGA_H;
 
   nh.param<bool>("enable_color", color_enabled, true);
-  nh.param<int>("color_frame_rate", color_frame_rate, 25);
+  nh.param<int>("color_frame_rate", color_frame_rate, 30);
 
   // Initialize image transport object
   image_transport::ImageTransport it(nh);
