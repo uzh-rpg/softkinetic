@@ -702,12 +702,12 @@ void configureNode(Node node)
     g_context.registerNode(node);
   }
 
-  if ((node.is<AudioNode>()) && (!g_anode.isSet()))
-  {
-    g_anode = node.as<AudioNode>();
-    configureAudioNode();
-    g_context.registerNode(node);
-  }
+  // if ((node.is<AudioNode>()) && (!g_anode.isSet()))
+  // {
+  //   g_anode = node.as<AudioNode>();
+  //   configureAudioNode();
+  //   g_context.registerNode(node);
+  // }
 }
 
 /*----------------------------------------------------------------------------*/
